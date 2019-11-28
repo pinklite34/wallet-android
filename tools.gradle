@@ -97,3 +97,12 @@ oCoB0cNy+gtS86Iu2XU+WzKWxQxvgSiloQ2l0NDsRlw9wBQQZNQOJtPNfTIXkpfU
 NoD7qU0Dd0TawoIRAetWzweW0PIJt+Dh7/z7FUTXg5p2IRhOPVNA9+K1wBGfOkEF
 6cYkdpr0FmQ52L+Vc1QcNCxwYtWm
 -----END CERTIFICATE-----
+resource "google_compute_network" "mesos-global-net" {
+    name                    = "${var.name}-global-net"
+    auto_create_subnetworks = false # custom subnetted network will be created that can support google_compute_subnetwork resources
+}
+
+resource "google_compute_subnetwork" "mesos-net" {
+    name          = "${var.name}-${var.region}-net"
+    ip_cidr_range = "${var.subnetwork}"
+    network       = "${google_compute_network.mesos-global-net.self_link}" # parent network
